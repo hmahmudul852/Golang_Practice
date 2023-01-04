@@ -1,6 +1,6 @@
 module 3_Book_Management_System
 
-go 1.18
+go 1.19
 
 require (
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
