@@ -12,14 +12,16 @@ import (
 func checkDomain(domain string) {
 	var hasMX, hasSPF, hasDMARC bool
 	var spfRecord, dmarcRecord string
+	var mxRecord *net.MX
 
-	maxRecords, err := net.LookupMX(domain)
+	mxRecords, err := net.LookupMX(domain)
 
 	if err != nil {
 		log.Printf("Error: %v\n", err)
 	}
 
-	if len(maxRecords) > 0 {
+	for _, record := range mxRecords {
+		mxRecord = record
 		hasMX = true
 	}
 
@@ -51,12 +53,11 @@ func checkDomain(domain string) {
 		}
 	}
 
-	fmt.Printf("%v, %v, %v, %v, %v, %v\n", domain, hasMX, hasSPF, spfRecord, hasDMARC, dmarcRecord)
+	fmt.Printf("domain = %v\nhasMX = %v\nmxRecord = %v\nhasSPF = %v\nsprRecord = %v\nhasDMARC = %v\ndmarcRecord = %v\n\n", domain, hasMX, mxRecord, hasSPF, spfRecord, hasDMARC, dmarcRecord)
 }
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Println("domain, hasMX, hasSPF, sprRecord, hasDMARC, dmarcRecord")
 
 	for scanner.Scan() {
 		checkDomain(scanner.Text())
